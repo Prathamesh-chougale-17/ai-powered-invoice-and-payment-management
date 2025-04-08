@@ -1,9 +1,8 @@
 'use server';
 
-import { ObjectId } from 'mongodb';
 import { getInvoicesCollection, getTransactionsCollection } from '@/lib/db';
-import { Invoice, InvoiceStatus, Transaction, TransactionStatus } from '@/types';
-import { startOfMonth, endOfMonth, format, eachMonthOfInterval, subMonths } from 'date-fns';
+import { InvoiceStatus, TransactionStatus } from '@/types';
+import { format, eachMonthOfInterval, subMonths } from 'date-fns';
 
 /**
  * Get recent invoice statistics

@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { ObjectId } from 'mongodb';
 import { getInvoicesCollection } from '@/lib/db';
-import { Invoice, InvoiceStatus } from '@/types';
+import { InvoiceStatus } from '@/types';
 import { revalidatePath } from 'next/cache';
 import { generateAIInvoice } from '@/lib/ai/invoice-generator';
 
@@ -39,7 +39,9 @@ export async function createInvoice(formData: FormData) {
 
         // Calculate total amount
         const totalAmount = itemsData.reduce(
-            (total: number, item: any) => total + item.amount,
+            (total: number, item: {
+                amount: number;
+            }) => total + item.amount,
             0
         );
 

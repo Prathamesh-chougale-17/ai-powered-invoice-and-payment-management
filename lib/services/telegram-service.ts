@@ -1,7 +1,7 @@
 'use server';
 
 import TelegramBot from 'node-telegram-bot-api';
-import { Invoice, InvoiceStatus, Transaction, TransactionStatus } from '@/types';
+import { Invoice, Transaction } from '@/types';
 import { formatCurrency, truncateAddress } from '@/lib/utils';
 
 // Initialize Telegram bot (use polling: false for webhook mode)

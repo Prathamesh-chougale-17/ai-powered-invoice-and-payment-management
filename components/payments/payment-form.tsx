@@ -57,8 +57,8 @@ export function PaymentForm({ invoice }: PaymentFormProps) {
 
     // Monitor transaction if hash is provided
     const {
-        data: transactionData,
-        isError: transactionError,
+        // data: transactionData,
+        // isError: transactionError,
         isLoading: isTransactionLoading,
         isSuccess: transactionSuccess
     } = useTransaction({

@@ -5,43 +5,43 @@ import { format } from 'date-fns';
 
 // Initialize Nodemailer transporter
 const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: Number(process.env.EMAIL_PORT) || 587,
-    secure: process.env.EMAIL_SECURE === 'true',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-    },
+  host: process.env.EMAIL_HOST,
+  port: Number(process.env.EMAIL_PORT) || 587,
+  secure: process.env.EMAIL_SECURE === 'true',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
 });
 
 /**
  * Send an invoice email to a client
  */
 export async function sendInvoiceEmail(
-    invoice: Invoice,
-    senderEmail: string,
-    senderName: string,
-    attachPDF: boolean = true
+  invoice: Invoice,
+  senderEmail: string,
+  senderName: string,
+  attachPDF: boolean = true
 ): Promise<{ success: boolean; messageId?: string; error?: string }> {
-    try {
-        // Generate invoice PDF if requested
-        let attachments = [];
+  try {
+    // Generate invoice PDF if requested
+    const attachments = [];
 
-        if (attachPDF) {
-            const pdfBuffer = await generateInvoicePDF(invoice);
-            attachments.push({
-                filename: `invoice-${invoice.number}.pdf`,
-                content: pdfBuffer,
-                contentType: 'application/pdf',
-            });
-        }
+    if (attachPDF) {
+      const pdfBuffer = await generateInvoicePDF(invoice);
+      attachments.push({
+        filename: `invoice-${invoice.number}.pdf`,
+        content: pdfBuffer,
+        contentType: 'application/pdf',
+      });
+    }
 
-        // Format dates
-        const invoiceDate = format(new Date(invoice.createdAt), 'MMMM dd, yyyy');
-        const dueDate = format(new Date(invoice.dueDate), 'MMMM dd, yyyy');
+    // Format dates
+    const invoiceDate = format(new Date(invoice.createdAt), 'MMMM dd, yyyy');
+    const dueDate = format(new Date(invoice.dueDate), 'MMMM dd, yyyy');
 
-        // Build email HTML
-        const emailHtml = `
+    // Build email HTML
+    const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="text-align: right; padding-bottom: 20px;">
           <h2 style="color: #333; margin: 0;">AI Finance Assistant</h2>
@@ -138,41 +138,41 @@ export async function sendInvoiceEmail(
       </div>
     `;
 
-        // Send the email
-        const info = await transporter.sendMail({
-            from: `"${senderName}" <${senderEmail}>`,
-            to: invoice.clientEmail,
-            subject: `Invoice #${invoice.number} from ${senderName}`,
-            html: emailHtml,
-            attachments,
-        });
+    // Send the email
+    const info = await transporter.sendMail({
+      from: `"${senderName}" <${senderEmail}>`,
+      to: invoice.clientEmail,
+      subject: `Invoice #${invoice.number} from ${senderName}`,
+      html: emailHtml,
+      attachments,
+    });
 
-        return { success: true, messageId: info.messageId };
-    } catch (error) {
-        console.error('Error sending invoice email:', error);
-        return {
-            success: false,
-            error: error instanceof Error ? error.message : 'Failed to send email'
-        };
-    }
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('Error sending invoice email:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to send email'
+    };
+  }
 }
 
 /**
  * Send a payment confirmation email
  */
 export async function sendPaymentConfirmationEmail(
-    invoice: Invoice,
-    senderEmail: string,
-    senderName: string
+  invoice: Invoice,
+  senderEmail: string,
+  senderName: string
 ): Promise<{ success: boolean; messageId?: string; error?: string }> {
-    try {
-        // Format dates
-        const paymentDate = invoice.paidAt
-            ? format(new Date(invoice.paidAt), 'MMMM dd, yyyy')
-            : format(new Date(), 'MMMM dd, yyyy');
+  try {
+    // Format dates
+    const paymentDate = invoice.paidAt
+      ? format(new Date(invoice.paidAt), 'MMMM dd, yyyy')
+      : format(new Date(), 'MMMM dd, yyyy');
 
-        // Build email HTML
-        const emailHtml = `
+    // Build email HTML
+    const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="text-align: right; padding-bottom: 20px;">
           <h2 style="color: #333; margin: 0;">AI Finance Assistant</h2>
@@ -221,20 +221,20 @@ export async function sendPaymentConfirmationEmail(
       </div>
     `;
 
-        // Send the email
-        const info = await transporter.sendMail({
-            from: `"${senderName}" <${senderEmail}>`,
-            to: invoice.clientEmail,
-            subject: `Payment Confirmation for Invoice #${invoice.number}`,
-            html: emailHtml,
-        });
+    // Send the email
+    const info = await transporter.sendMail({
+      from: `"${senderName}" <${senderEmail}>`,
+      to: invoice.clientEmail,
+      subject: `Payment Confirmation for Invoice #${invoice.number}`,
+      html: emailHtml,
+    });
 
-        return { success: true, messageId: info.messageId };
-    } catch (error) {
-        console.error('Error sending payment confirmation email:', error);
-        return {
-            success: false,
-            error: error instanceof Error ? error.message : 'Failed to send email'
-        };
-    }
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('Error sending payment confirmation email:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to send email'
+    };
+  }
 }

@@ -10,6 +10,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import type { TooltipItem } from 'chart.js';
 
 // Register ChartJS components
 ChartJS.register(
@@ -64,7 +65,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
                     text: 'Revenue ($)',
                 },
                 ticks: {
-                    callback: function (this: any, tickValue: string | number) {
+                    callback: function (tickValue: string | number) {
                         if (typeof tickValue === 'number') {
                             return `$${tickValue}`;
                         }
@@ -93,7 +94,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
             },
             tooltip: {
                 callbacks: {
-                    label: function (context: any) {
+                    label: function (context: TooltipItem<'bar'>) {
                         let label = context.dataset.label || '';
 
                         if (label) {

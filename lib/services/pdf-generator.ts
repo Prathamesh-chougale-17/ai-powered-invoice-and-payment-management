@@ -49,6 +49,7 @@ export async function generateInvoicePDF(invoice: Invoice): Promise<Buffer> {
  * Add header section to PDF
  */
 function addHeader(doc: PDFKit.PDFDocument, invoice: Invoice) {
+    console.log(invoice);
     // Company logo and name
     doc.fontSize(20).text('AI Finance Assistant', { align: 'right' });
     doc.fontSize(10).text('Blockchain-Powered Invoicing', { align: 'right' });
@@ -190,6 +191,7 @@ function addNotesAndTerms(doc: PDFKit.PDFDocument, invoice: Invoice) {
  * Add footer with pagination
  */
 function addFooter(doc: PDFKit.PDFDocument, invoice: Invoice) {
+    console.log(invoice);
     const pageCount = doc.bufferedPageRange().count;
     for (let i = 0; i < pageCount; i++) {
         doc.switchToPage(i);

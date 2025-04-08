@@ -68,7 +68,13 @@ export function StatusDistributionChart({ data }: StatusDistributionChartProps) 
             },
             tooltip: {
                 callbacks: {
-                    label: function (context: any) {
+                    label: function (context: {
+                        label: string;
+                        parsed: number;
+                        dataset: {
+                            data: number[];
+                        };
+                    }) {
                         const total = context.dataset.data.reduce((sum: number, value: number) => sum + value, 0);
                         const percentage = ((context.parsed * 100) / total).toFixed(1);
                         return `${context.label}: ${context.parsed} (${percentage}%)`;

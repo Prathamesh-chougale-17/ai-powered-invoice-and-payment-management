@@ -172,6 +172,7 @@ export default function SettingsPage() {
 
     // Handle email settings submission
     const onSubmitEmail = async (data: EmailFormValues) => {
+        console.log('Email settings submitted:', data);
         try {
             setIsSubmittingEmail(true);
 
@@ -196,6 +197,7 @@ export default function SettingsPage() {
 
     // Handle profile settings submission
     const onSubmitProfile = async (data: ProfileFormValues) => {
+        console.log('Profile settings submitted:', data);
         try {
             setIsSubmittingProfile(true);
 

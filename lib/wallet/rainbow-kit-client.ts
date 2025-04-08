@@ -41,3 +41,13 @@ export const config = getDefaultConfig({
         },
     ssr: true,
 });
+
+export const supportedChains = [
+    { id: mainnet.id, name: 'Ethereum', icon: '/chains/ethereum.svg' },
+    { id: polygon.id, name: 'Polygon', icon: '/chains/polygon.svg' },
+    { id: optimism.id, name: 'Optimism', icon: '/chains/optimism.svg' },
+    { id: arbitrum.id, name: 'Arbitrum', icon: '/chains/arbitrum.svg' },
+    { id: base.id, name: 'Base', icon: '/chains/base.svg' },
+];
+
+// C

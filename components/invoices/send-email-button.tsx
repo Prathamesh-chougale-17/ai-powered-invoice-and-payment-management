@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Mail, Loader2, CheckCircle, AlertCircle, Send } from 'lucide-react';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,

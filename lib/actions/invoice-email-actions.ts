@@ -3,9 +3,7 @@
 import { z } from 'zod';
 import { getInvoice } from '@/lib/actions/invoice-actions';
 import { sendInvoiceEmail, sendPaymentConfirmationEmail } from '@/lib/services/email-service';
-import { ObjectId } from 'mongodb';
 import { Invoice, InvoiceStatus } from '@/types';
-import { revalidatePath } from 'next/cache';
 
 // Schema for email request
 const EmailRequestSchema = z.object({

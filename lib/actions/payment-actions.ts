@@ -68,6 +68,7 @@ export async function initiatePayment(formData: FormData) {
 // Function to validate a transaction for an invoice
 export async function validatePayment(invoiceId: string, transactionHash: string) {
     try {
+        console.log('Validating payment for invoice:', invoiceId, 'with transaction hash:', transactionHash);
         // In a real application, you would verify the transaction on the blockchain
         // For this example, we'll just simulate it
 

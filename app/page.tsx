@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { Header } from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
 import {
-  FileText,
   Wallet,
   CreditCard,
   Sparkles,

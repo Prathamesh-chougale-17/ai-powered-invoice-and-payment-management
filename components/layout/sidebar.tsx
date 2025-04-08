@@ -11,6 +11,7 @@ import {
     Settings,
     Users,
     LogOut,
+    ChartScatter,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -53,6 +54,12 @@ export function Sidebar({ className }: SidebarProps) {
             icon: Settings,
             active: pathname.includes('/dashboard/settings'),
         },
+        {
+            href: '/dashboard/analytics',
+            label: 'Analytics',
+            icon: ChartScatter,
+            active: pathname.includes('/dashboard/analytics'),
+        }
     ];
 
     return (

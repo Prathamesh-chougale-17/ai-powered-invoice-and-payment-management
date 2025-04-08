@@ -9,8 +9,10 @@ import {
     CategoryScale,
     LinearScale,
     Title,
+    TooltipItem,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+
 
 // Register ChartJS components
 ChartJS.register(
@@ -112,7 +114,7 @@ export function NetworkDistributionChart({ data }: NetworkDistributionChartProps
                     text: 'Amount ($)',
                 },
                 ticks: {
-                    callback: function (this: any, tickValue: string | number, index: number, ticks: any[]) {
+                    callback: function (tickValue: string | number) {
                         const value = typeof tickValue === 'string' ? parseFloat(tickValue) : tickValue;
                         return `$${value}`;
                     },
@@ -125,17 +127,17 @@ export function NetworkDistributionChart({ data }: NetworkDistributionChartProps
             },
             tooltip: {
                 callbacks: {
-                    label: function (context: any) {
-                        let label = context.dataset.label || '';
+                    label: function (tooltipItem: TooltipItem<'bar'>) {
+                        let label = tooltipItem.dataset.label || '';
 
                         if (label) {
                             label += ': ';
                         }
 
-                        if (context.datasetIndex === 0) {
-                            label += context.parsed.y;
+                        if (tooltipItem.datasetIndex === 0) {
+                            label += tooltipItem.parsed.y;
                         } else {
-                            label += `$${context.parsed.y.toFixed(2)}`;
+                            label += `$${tooltipItem.parsed.y.toFixed(2)}`;
                         }
 
                         return label;
