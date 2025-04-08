@@ -52,7 +52,7 @@ export async function sendInvoicePaymentNotification(invoice: Invoice): Promise<
             `*Invoice:* ${invoice.number}\n` +
             `*Client:* ${invoice.clientName}\n` +
             `*Amount:* ${formatCurrency(invoice.totalAmount)}\n` +
-            `*Paid on:* ${invoice.paidAt ? new Date(invoice.paidAt).toLocaleDateString() : 'Unknown'}\n` +
+            `*Paid on:* ${invoice.createdAt ? new Date(invoice.createdAt).toLocaleDateString() : 'Unknown'}\n` +
             (invoice.transactionHash ? `*Transaction:* ${truncateAddress(invoice.transactionHash)}\n` : '');
 
         await bot.sendMessage(CHAT_ID, message, { parse_mode: 'Markdown' });
