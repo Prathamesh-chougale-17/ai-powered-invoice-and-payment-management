@@ -21,6 +21,7 @@ import { ConnectWalletButton } from '@/components/ui/connect-wallet-button';
 import { createInvoice } from '@/lib/actions/invoice-actions';
 import { AIGeneratedInvoice } from '@/types';
 import { cn } from '@/lib/utils';
+import { sendInvoicePaymentNotification } from '@/lib/services/telegram-service';
 
 // Invoice form schema
 const formSchema = z.object({
@@ -138,8 +139,18 @@ export function InvoiceForm({ aiGeneratedInvoice }: InvoiceFormProps) {
 
             const result = await createInvoice(formData);
 
+
             if (result.success) {
-                router.push(`/dashboard/invoices/${result.id}`);
+                // router.push(`/dashboard/invoices/${result.id}`); 
+                const invoice = result.invoice;
+                if (!invoice) {
+                    console.error('Invoice not found after creation');
+                    return;
+                }
+                await sendInvoicePaymentNotification(
+                    invoice
+                )
+                router.push(`/dashboard/invoices`);
             } else {
                 // Handle error
                 console.error('Failed to create invoice', result.error || result.errors);

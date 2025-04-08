@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { ObjectId } from 'mongodb';
 import { getInvoicesCollection } from '@/lib/db';
-import { InvoiceStatus } from '@/types';
+import { Invoice, InvoiceStatus } from '@/types';
 import { revalidatePath } from 'next/cache';
 import { generateAIInvoice } from '@/lib/ai/invoice-generator';
 
@@ -28,7 +28,13 @@ const CreateInvoiceSchema = z.object({
 });
 
 // Function to create a new invoice
-export async function createInvoice(formData: FormData) {
+export async function createInvoice(formData: FormData): Promise<{
+    success: boolean;
+    id?: string;
+    invoice?: Invoice;
+    error?: string;
+    errors?: Record<string, string>;
+}> {
     try {
         // Parse form data
         const rawData = Object.fromEntries(formData.entries());
@@ -64,22 +70,41 @@ export async function createInvoice(formData: FormData) {
         // Get invoices collection
         const invoicesCollection = await getInvoicesCollection();
 
-        // Create invoice in database
-        const result = await invoicesCollection.insertOne({
+        // Create invoice object with all required fields
+        const invoiceToInsert = {
             ...validatedData,
+            // Add an id to each item
+            items: validatedData.items.map((item, index) => ({
+                ...item,
+                id: `item-${index + 1}`
+            })),
             number: generateInvoiceNumber(),
             createdAt: new Date(),
             status: InvoiceStatus.PENDING,
             totalAmount,
             userId: 'user-id', // Replace with actual user ID from auth
-        });
+        };
+
+        // Create invoice in database
+        const result = await invoicesCollection.insertOne(invoiceToInsert);
+
+        // Construct the complete invoice with _id and id
+        const invoice = {
+            id: result.insertedId.toString(),
+            ...invoiceToInsert
+        };
 
         revalidatePath('/dashboard/invoices');
-        return { success: true, id: result.insertedId.toString() };
+        return { success: true, id: result.insertedId.toString(), invoice };
     } catch (error) {
         console.error('Error creating invoice:', error);
         if (error instanceof z.ZodError) {
-            return { success: false, errors: error.errors };
+            const fieldErrors: Record<string, string> = {};
+            error.errors.forEach((err) => {
+                const path = err.path.join('.') || 'form';
+                fieldErrors[path] = err.message;
+            });
+            return { success: false, errors: fieldErrors };
         }
         return { success: false, error: 'Failed to create invoice' };
     }

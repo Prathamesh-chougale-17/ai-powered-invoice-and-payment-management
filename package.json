@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "telegram:setup": "node scripts/setup-telegram-webhook.js",
+    "telegram:test": "node scripts/test-telegram-notification.js"
   },
   "dependencies": {
     "@google/genai": "^0.7.0",
@@ -28,6 +30,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "https": "^1.0.0",
     "lucide-react": "^0.487.0",
     "mongodb": "^6.15.0",
     "next": "15.2.4",
