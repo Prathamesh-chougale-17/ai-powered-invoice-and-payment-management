@@ -12,6 +12,12 @@ import {
     optimism,
     arbitrum,
     base,
+    sepolia,
+    goerli,
+    localhost,
+    hardhat,
+    polygonMumbai,
+    avalanche,
 } from 'wagmi/chains';
 import {
     QueryClientProvider,
@@ -29,8 +35,8 @@ interface ProvidersProps {
 
 const config = getDefaultConfig({
     appName: 'My RainbowKit App',
-    projectId: 'YOUR_PROJECT_ID',
-    chains: [mainnet, polygon, optimism, arbitrum, base],
+    projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || 'default',
+    chains: [mainnet, polygon, optimism, arbitrum, base, sepolia, goerli, localhost, hardhat, polygonMumbai, avalanche],
     ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
